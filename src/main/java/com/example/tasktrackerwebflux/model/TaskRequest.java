@@ -1,12 +1,10 @@
 package com.example.tasktrackerwebflux.model;
 
-import com.example.tasktrackerwebflux.entity.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
 import java.util.Set;
 
 @Data

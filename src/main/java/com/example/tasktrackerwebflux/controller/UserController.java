@@ -31,18 +31,14 @@ public class UserController {
   @GetMapping
   public Flux<UserResponse> getAllUsers() {
     Flux<User> users = userService.findAll();
-    return users.flatMap( item -> {
-                            return Flux.just( userMapper.userToUserResponse( item ) );
-                          } )
+    return users.flatMap( item -> Flux.just( userMapper.userToUserResponse( item ) ) )
                 .doOnNext( publisher::publisher );
   }
 
   @GetMapping("/{id}")
   public Mono<ResponseEntity<UserResponse>> getById( @PathVariable String id ) {
     Mono<User> user = userService.findById( id );
-    return user.flatMap( item -> {
-                           return Mono.just( userMapper.userToUserResponse( item ) );
-                         })
+    return user.flatMap( item -> Mono.just( userMapper.userToUserResponse( item ) ) )
                .map(  ResponseEntity::ok )
                .defaultIfEmpty( ResponseEntity.notFound().build() );
   }
@@ -50,18 +46,14 @@ public class UserController {
   @PostMapping
   public Mono<UserResponse> createUser( @RequestBody @Valid UserRequest request ) {
     Mono<User> user = userService.save( userMapper.userRequestToUser( request ) );
-    return user.flatMap(  item -> {
-             return Mono.just( userMapper.userToUserResponse( item ) );
-           });
+    return user.flatMap(  item -> Mono.just( userMapper.userToUserResponse( item ) ) );
   }
 
   @PutMapping("/{id}")
   public Mono<UserResponse> updateUser( @PathVariable String id,
                                         @RequestBody UserRequest request ) {
     Mono<User> user = userService.update( id, userMapper.userRequestToUser( request ) );
-    return user.flatMap( item -> {
-             return Mono.just( userMapper.userToUserResponse( item ) );
-           });
+    return user.flatMap( item -> Mono.just( userMapper.userToUserResponse( item ) ) );
   }
 
   @DeleteMapping("/{id}")

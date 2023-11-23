@@ -24,9 +24,9 @@ public class TaskService {
   public Flux<Task> findAll() {
     Flux<Task> tasks = taskRepository.findAll();
 
-    Flux<User> userAuthor = tasks.flatMap( x -> { return userRepository.findById( x.getAuthorId() ); });
+    Flux<User> userAuthor = tasks.flatMap( x -> userRepository.findById( x.getAuthorId() ) );
 
-    Flux<User> userAssignee = tasks.flatMap( x -> { return userRepository.findById( x.getAssigneeId() ); });
+    Flux<User> userAssignee = tasks.flatMap( x -> userRepository.findById( x.getAssigneeId() ) );
 
     Flux<List<User>> userObObserver = tasks.flatMap( user -> {
                        Set<Mono<User>> monoset = new HashSet<>();
@@ -36,7 +36,7 @@ public class TaskService {
 
                        Flux merged = Flux.empty();
                        for ( Mono out : monoset ) {
-                         merged = merged.mergeWith(out);
+                         merged = merged.mergeWith( out );
                        }
                        return merged.collectList();
                      });
@@ -62,9 +62,7 @@ public class TaskService {
   }
 
   private Mono<User> getUserAuthorOrAssignee( Mono<Task> findTask, boolean itAuthor ) {
-    return findTask.flatMap( user -> {
-             return userRepository.findById( itAuthor ? user.getAuthorId() : user.getAssigneeId() );
-           });
+    return findTask.flatMap( user -> userRepository.findById( itAuthor ? user.getAuthorId() : user.getAssigneeId() ) );
   }
 
   private Mono<List<User>> getObserverUsers( Mono<Task> findTask ) {

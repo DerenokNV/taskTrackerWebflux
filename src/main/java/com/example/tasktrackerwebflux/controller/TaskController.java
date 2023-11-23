@@ -28,43 +28,33 @@ public class TaskController {
   @GetMapping
   public Flux<TaskResponse> getAllTasks() {
     Flux<Task> tasks = taskService.findAll();
-    return tasks.flatMap( item -> {
-              return Flux.just( taskMapper.taskToTaskResponse( item ) );
-            } );
+    return tasks.flatMap( item -> Flux.just( taskMapper.taskToTaskResponse( item ) ) );
   }
 
   @PostMapping
   public Mono<TaskResponse> createTask( @RequestBody @Valid TaskRequest request ) {
     Mono<Task> task = taskService.save( taskMapper.taskRequestToTaskMapper( request ) );
-    return task.flatMap(  item -> {
-             return Mono.just( taskMapper.taskToTaskResponse( item ) );
-           });
+    return task.flatMap(  item -> Mono.just( taskMapper.taskToTaskResponse( item ) ) );
   }
 
   @GetMapping("/{id}")
   public Mono<TaskResponse> getTaskById( @PathVariable String id ) {
     Mono<Task> task = taskService.findById( id );
-    return task.flatMap(  item -> {
-                            return Mono.just( taskMapper.taskToTaskResponse( item ) );
-                       });
+    return task.flatMap(  item -> Mono.just( taskMapper.taskToTaskResponse( item ) ) );
   }
 
   @PutMapping("/{id}")
   public Mono<TaskResponse> updateTask( @PathVariable String id,
                                         @RequestBody TaskRequest request ) {
     Mono<Task> task = taskService.update( id, taskMapper.taskRequestToTaskMapper( request ) );
-    return task.flatMap(  item -> {
-             return Mono.just( taskMapper.taskToTaskResponse( item ) );
-           });
+    return task.flatMap(  item -> Mono.just( taskMapper.taskToTaskResponse( item ) ) );
   }
 
   @PutMapping("/task-add-observer/{id}")
   public Mono<TaskResponse> taskAddObserver( @PathVariable String id,
                                              @RequestBody TaskAddObserverRequest request ) {
     Mono<Task> task = taskService.taskAddObserver( id, request.getObserverId() );
-    return task.flatMap(  item -> {
-             return Mono.just( taskMapper.taskToTaskResponse( item ) );
-           });
+    return task.flatMap(  item -> Mono.just( taskMapper.taskToTaskResponse( item ) ) );
   }
 
   @DeleteMapping("/{id}")
