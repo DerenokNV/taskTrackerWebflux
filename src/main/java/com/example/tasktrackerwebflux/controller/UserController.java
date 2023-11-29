@@ -6,7 +6,6 @@ import com.example.tasktrackerwebflux.model.UserRequest;
 import com.example.tasktrackerwebflux.model.UserResponse;
 import com.example.tasktrackerwebflux.publisher.UserPublisher;
 import com.example.tasktrackerwebflux.service.UserService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -41,12 +40,6 @@ public class UserController {
     return user.flatMap( item -> Mono.just( userMapper.userToUserResponse( item ) ) )
                .map(  ResponseEntity::ok )
                .defaultIfEmpty( ResponseEntity.notFound().build() );
-  }
-
-  @PostMapping
-  public Mono<UserResponse> createUser( @RequestBody @Valid UserRequest request ) {
-    Mono<User> user = userService.save( userMapper.userRequestToUser( request ) );
-    return user.flatMap(  item -> Mono.just( userMapper.userToUserResponse( item ) ) );
   }
 
   @PutMapping("/{id}")
