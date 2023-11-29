@@ -19,8 +19,6 @@ public class TaskRequest {
 
   private String status;
 
-  private String authorId;
-
   private String assigneeId;
 
   private Set<String> observerIds;

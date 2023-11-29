@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,12 +42,6 @@ public class UserController {
     return user.flatMap( item -> Mono.just( userMapper.userToUserResponse( item ) ) )
                .map(  ResponseEntity::ok )
                .defaultIfEmpty( ResponseEntity.notFound().build() );
-  }
-
-  @PostMapping
-  public Mono<UserResponse> createUser( @RequestBody @Valid UserRequest request ) {
-    Mono<User> user = userService.save( userMapper.userRequestToUser( request ) );
-    return user.flatMap(  item -> Mono.just( userMapper.userToUserResponse( item ) ) );
   }
 
   @PutMapping("/{id}")

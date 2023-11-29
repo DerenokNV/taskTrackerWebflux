@@ -98,9 +98,11 @@ public class TaskService {
 
   }
 
-  public Mono<Task> save( Task task ) {
+  public Mono<Task> save( Task task, String idAuthorUser ) {
     task.setId( UUID.randomUUID().toString() );
     task.setCreatedAt( Instant.now() );
+    task.setAuthorId( idAuthorUser );
+
     return taskRepository.save( task );
   }
 
